@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: [debian:12-slim, ubuntu:22.04, ubuntu:24.04, alpine:3.20]
+        include:`n          - image: debian:12-slim`n            id: debian-12-slim`n          - image: ubuntu:22.04`n            id: ubuntu-22-04`n          - image: ubuntu:24.04`n            id: ubuntu-24-04`n          - image: alpine:3.20`n            id: alpine-3-20
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -30,11 +30,11 @@ jobs:
           matrix: ${{ matrix.image }}
           network: bridge
           packages: curl
-          output: reports/opsscript-gate-${{ matrix.image }}.json
+          output: reports/opsscript-gate-${{ matrix.id }}.json
       - name: Upload compatibility report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: opsscript-gate-${{ matrix.image }}
+          name: opsscript-gate-${{ matrix.id }}
           path: reports/
           if-no-files-found: ignore
