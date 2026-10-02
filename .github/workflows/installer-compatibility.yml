@@ -37,7 +37,7 @@ jobs:
           shell: auto
           matrix: ${{ matrix.image }}
           network: bridge
-          packages: bash curl
+          packages: bash,curl
           output: reports/opsscript-gate-${{ matrix.id }}.json
       - name: Upload compatibility report
         if: always()
