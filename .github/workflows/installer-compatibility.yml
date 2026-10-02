@@ -1,0 +1,48 @@
+name: Installer compatibility
+
+on:
+  pull_request:
+    paths:
+      - install.sh
+      - .github/workflows/installer-compatibility.yml
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    name: install.sh / ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: debian:12-slim
+            id: debian-12-slim
+          - image: ubuntu:22.04
+            id: ubuntu-22-04
+          - image: ubuntu:24.04
+            id: ubuntu-24-04
+          - image: alpine:3.20
+            id: alpine-3-20
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check installer compatibility
+        uses: Mresyzz/opsscript-gate@v0.8.3
+        with:
+          script-path: install.sh
+          shell: auto
+          matrix: ${{ matrix.image }}
+          network: bridge
+          packages: bash,curl
+          output: reports/opsscript-gate-${{ matrix.id }}.json
+      - name: Upload compatibility report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: opsscript-gate-${{ matrix.id }}
+          path: reports/
+          if-no-files-found: ignore
