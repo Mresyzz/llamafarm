@@ -16,7 +16,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:`n          - image: debian:12-slim`n            id: debian-12-slim`n          - image: ubuntu:22.04`n            id: ubuntu-22-04`n          - image: ubuntu:24.04`n            id: ubuntu-24-04`n          - image: alpine:3.20`n            id: alpine-3-20
+        include:
+          - image: debian:12-slim
+            id: debian-12-slim
+          - image: ubuntu:22.04
+            id: ubuntu-22-04
+          - image: ubuntu:24.04
+            id: ubuntu-24-04
+          - image: alpine:3.20
+            id: alpine-3-20
     steps:
       - name: Check out
         uses: actions/checkout@v4
